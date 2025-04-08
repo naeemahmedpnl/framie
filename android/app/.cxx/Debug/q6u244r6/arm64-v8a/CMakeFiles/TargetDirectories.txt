@@ -1,0 +1,2 @@
+/Users/bilalkhanzada/Desktop/flutter projects/beauty/android/app/.cxx/Debug/q6u244r6/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/bilalkhanzada/Desktop/flutter projects/beauty/android/app/.cxx/Debug/q6u244r6/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,29 @@
+const kSplashViewRoute = "/SPLASH_VIEW";
+const kOnboardingViewRoute = "/ONBOARDING_VIEW";
+const kAppointmentViewRoute = "/APPOINTMENT_VIEW";
+const kServiceInViewRoute = "/SERVICE_IN_VIEW";
+const kNotServiceInViewRoute = "/NOT_SERVICE_IN_VIEW";
+const kNavigationMenuViewRoute = "/NAVIGATION_VIEW";
+const kServiceByAddressViewRoute = "/SERVICE_BY_ADDRESS_VIEW";
+const kHairCutAndStylingViewRoute = "/HAIRCUT_AND_STYLING_VIEW";
+const kBookingDetailsViewRoute = "/BOOKING_DETAILS_VIEW";
+const kLoginViewRoute = "/LOGIN_VIEW";
+const kSignUpViewRoute = "/SIGNUP_VIEW";
+const kOTPVerificationViewRoute = "/OTP_VERIFICATION_VIEW";
+const kFavouritesViewRoute = "/FAVOURITE_VIEW";
+const kBookingReceiptDetailsViewRoute = "/BOOKING_RECEIPT_DETAILS_VIEW";
+const kSettingProfileViewRoute = "/SETTING_PROFILE_VIEW";
+const kWalletViewRoute = "/WALLET_VIEW";
+const kAccountSettingsViewRoute = "/ACCOUNT_SETTINGS_VIEW";
+const kAboutAppViewRoute = "/ABOUT_VIEW";
+const kLanguagesViewRoute = "/LANGUAGE_VIEW";
+const kEditAddressViewRoute = "/EDIT_ADDRESS_VIEW";
+const kMyAddressesScreenRoute = "/MY_ADDRESS_VIEW";
+const kAddAddressScreenRoute = "/Add_ADDRESS_VIEW";
+const kPaymentMethodScreenRoute = "/Add_Payment_VIEW";
+const kHelpViewControllerRoute = "/HELP_VIEW";
+const kBusinessProfileCraeteViewRoute = "/BusinessProfileCraeteView_VIEW";
+const kCreateProfileServiceProfileCreateViewRoute =
+    "/CreateProfileServiceProfileCreate";
+
+const kAdminDashboardScreenRoute = "/AdminDashboardScreen";

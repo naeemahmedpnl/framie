@@ -1,0 +1,2 @@
+C:/Users/City Computer/Desktop/New folder/beauty/android/app/.cxx/Debug/6q5n683v/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/City Computer/Desktop/New folder/beauty/android/app/.cxx/Debug/6q5n683v/armeabi-v7a/CMakeFiles/rebuild_cache.dir

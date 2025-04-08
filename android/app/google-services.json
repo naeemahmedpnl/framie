@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "166975517763",
+    "project_id": "framie-c1450",
+    "storage_bucket": "framie-c1450.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166975517763:android:ff22ffd94020d6aa4090f6",
+        "android_client_info": {
+          "package_name": "com.venturevilla.beauty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmshnDqNB7SDmlgjf8FKoWMNnvgbcoOhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
