@@ -27,7 +27,10 @@ class AdminNavigationMenu extends StatelessWidget {
               ),
             ],
           ),
-          height: 80,
+          height: 65 +
+              MediaQuery.of(context).padding.bottom, 
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
           child: Obx(
             () {
               return Row(
