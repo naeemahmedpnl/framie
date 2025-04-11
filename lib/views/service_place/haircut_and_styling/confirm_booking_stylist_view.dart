@@ -48,202 +48,209 @@ class _ConfirmBookingStylistScreenState
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Service Details
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(
-                      'https://appsdemo.pro/Framie/${widget.employees.employeeImage}',
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "USD",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Text(
-                        widget.serviceName,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.purple,
-                        ),
-                      ),
-                      Text(
-                        "Thursday 01 September",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      Text(
-                        "16:30-17:30(60 Minutes)",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-
-              // Payment Method
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.shade300),
-                ),
-                child: ListTile(
-                  title: const Text(
-                    "Payment Method",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Get.bottomSheet(PaymentSelectionSheet(
-                      onSelect: (method) {
-                        controller.selectPaymentMethod(method);
-                      },
-                    ));
-                  },
-                ),
-              ),
-              const SizedBox(height: 32),
-
-              // Price Details
-              _priceRow("Deep tissue massage", "\$ "),
-              const SizedBox(height: 16),
-              _priceRow("Subtotal", "\$ 88.00"),
-              const SizedBox(height: 16),
-              _priceRow("Total to pay", "\$ 88.00", isBold: true),
-              const SizedBox(height: 32),
-
-              // Apple Pay Option
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,  
+              top: 20,
+              
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Service Details
+                Row(
                   children: [
-                    Image.asset(
-                      'assets/icons/apple.png',
-                      height: 24,
-                    ),
-                    const SizedBox(width: 8),
-                    const Text(
-                      "Pay",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(
+                        'https://appsdemo.pro/Framie/${widget.employees.employeeImage}',
                       ),
+                    ),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "USD",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          widget.serviceName,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        Text(
+                          "Thursday 01 September",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          "16:30-17:30(60 Minutes)",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 32),
-
-              // Terms and Privacy
-              Center(
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Colors.black87,
+                const SizedBox(height: 32),
+        
+                // Payment Method
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: ListTile(
+                    title: const Text(
+                      "Payment Method",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Get.bottomSheet(PaymentSelectionSheet(
+                        onSelect: (method) {
+                          controller.selectPaymentMethod(method);
+                        },
+                      ));
+                    },
+                  ),
+                ),
+                const SizedBox(height: 32),
+        
+                // Price Details
+                _priceRow("Deep tissue massage", "\$ "),
+                const SizedBox(height: 16),
+                _priceRow("Subtotal", "\$ 88.00"),
+                const SizedBox(height: 16),
+                _priceRow("Total to pay", "\$ 88.00", isBold: true),
+                const SizedBox(height: 32),
+        
+                // Apple Pay Option
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const TextSpan(
-                        text: "By Booking, you acknowledge and accept\n",
+                      Image.asset(
+                        'assets/icons/apple.png',
+                        height: 24,
                       ),
-                      TextSpan(
-                        text: "our terms",
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Pay",
                         style: TextStyle(
-                          color: Colors.purple.shade400,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                      const TextSpan(text: " & "),
-                      TextSpan(
-                        text: "privacy policy",
-                        style: TextStyle(
-                          color: Colors.purple.shade400,
-                          decoration: TextDecoration.underline,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-
-              // Book & Pay Button
-              Container(
-                width: double.infinity,
-                height: 56,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.purple.shade700,
-                      Colors.purple.shade300,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(28),
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle booking and payment
-                    Get.to( ()=>    BookingServiceDetailsScreen(
-                      salon: widget.services,
-                      employees: widget.employees,
-                    ));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(28),
-                    ),
-                  ),
-                  child: Text(
-                    "Book & Pay  £ ${controller.totalPrice.value}",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                const SizedBox(height: 32),
+        
+                // Terms and Privacy
+                Center(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                      children: [
+                        const TextSpan(
+                          text: "By Booking, you acknowledge and accept\n",
+                        ),
+                        TextSpan(
+                          text: "our terms",
+                          style: TextStyle(
+                            color: Colors.purple.shade400,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        const TextSpan(text: " & "),
+                        TextSpan(
+                          text: "privacy policy",
+                          style: TextStyle(
+                            color: Colors.purple.shade400,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 32),
+        
+                // Book & Pay Button
+                Container(
+                  width: double.infinity,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.purple.shade700,
+                        Colors.purple.shade300,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Handle booking and payment
+                      Get.to( ()=>    BookingServiceDetailsScreen(
+                        salon: widget.services,
+                        employees: widget.employees,
+                      ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(28),
+                      ),
+                    ),
+                    child: Text(
+                      "Book & Pay  £ ${controller.totalPrice.value}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -285,34 +292,40 @@ class PaymentSelectionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 16,
+        bottom: 16
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 20),
-          const Text(
-            'Select Payment Option',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              'Select Payment Option',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildPaymentOption(),
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildSelectButton(),
-          ),
-          const SizedBox(height: 32),
-        ],
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildPaymentOption(),
+            ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildSelectButton(),
+            ),
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }

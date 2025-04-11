@@ -208,4 +208,51 @@ class AllEmployeesRepository {
       };
     }
   }
+
+Future<Map<String, dynamic>> deleteEmployee(String employeeId) async {
+    final Uri url = Uri.parse('$kBaseUrl/api/admin/deleteEmployee?employeeId=$employeeId');
+    try {
+      log('Deleting employee with ID: $employeeId from: $url');
+
+      String? token = await UserSession().getUserToken();
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      log('Response status code: ${response.statusCode}');
+      log('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+        if (responseBody['success'] == true) {
+          return {
+            'success': true,
+            'msg': responseBody['msg'] ?? 'Employee deleted successfully',
+          };
+        } else {
+          log('Failed to delete employee: ${responseBody['msg']}');
+          return {
+            'success': false,
+            'msg': responseBody['msg'] ?? 'Failed to delete employee',
+          };
+        }
+      } else {
+        log('Failed to delete employee: ${response.reasonPhrase}');
+        return {
+          'success': false,
+          'msg': 'Failed to delete employee: ${response.reasonPhrase}',
+        };
+      }
+    } catch (e) {
+      log('Error deleting employee: $e');
+      return {
+        'success': false,
+        'msg': 'An error occurred while deleting the employee',
+      };
+    }
+  }
 }

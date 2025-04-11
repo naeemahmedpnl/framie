@@ -15,7 +15,7 @@ class AdminAppointmentRepositoryUser {
   Future<List<AppointmentData>> fetchAllEmployees() async {
     String userId = UserSession.userModel.value.id.toString();
     final Uri url = Uri.parse(
-      '$kBaseUrl/api/admin/getAppointmentByAdmin?adminId=$userId',
+      '$kBaseUrl/api/admin/getAppointmentByAdmin?adminId=$userId&status=All',
     );
     try {
       log('Fetching all salons from: $url');

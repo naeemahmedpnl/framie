@@ -57,94 +57,96 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 20),
-            _buildSettingsField(
-              label: 'Name',
-              child: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter your name',
-                ),
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            const Divider(),
-            _buildSettingsField(
-              label: 'Phone No',
-              child: TextField(
-                controller: phoneController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter your phone number',
-                ),
-                keyboardType: TextInputType.phone,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            const Divider(),
-            _buildSettingsField(
-              label: 'City',
-              child: TextField(
-                controller: cityController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter your City',
-                ),
-                keyboardType: TextInputType.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            const Divider(),
-            const SizedBox(height: 20),
-            _buildSectionHeader('Other Settings'),
-            InkWell(
-              onTap: controller.showDeleteConfirmation,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: Text(
-                  'Delete My Account',
-                  style: TextStyle(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 20),
+              _buildSettingsField(
+                label: 'Name',
+                child: TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Enter your name',
+                  ),
+                  style: const TextStyle(
                     fontSize: 16,
-                    color: Colors.purple.shade400,
-                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
                   ),
                 ),
               ),
-            ),
-            const Divider(),
-            const Spacer(),
-            Obx(
-              () => Padding(
-                padding: const EdgeInsets.only(bottom: 30.0),
-                child: CustomButton(
-                  text: 'Save Changes',
-                  isLoading: controller.isLoading.value,
-                  onPressed: () {
-                    controller.saveChanges(
-                      city: cityController.text,
-                      name: nameController.text,
-                      phone: phoneController.text,
-                    );
-                  },
+              const Divider(),
+              _buildSettingsField(
+                label: 'Phone No',
+                child: TextField(
+                  controller: phoneController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Enter your phone number',
+                  ),
+                  keyboardType: TextInputType.phone,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
-            ),
-          ],
+              const Divider(),
+              _buildSettingsField(
+                label: 'City',
+                child: TextField(
+                  controller: cityController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Enter your City',
+                  ),
+                  keyboardType: TextInputType.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              const Divider(),
+              const SizedBox(height: 20),
+              _buildSectionHeader('Other Settings'),
+              InkWell(
+                onTap: controller.showDeleteConfirmation,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Text(
+                    'Delete My Account',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.purple.shade400,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const Divider(),
+              const Spacer(),
+              Obx(
+                () => Padding(
+                  padding: const EdgeInsets.only(bottom: 30.0),
+                  child: CustomButton(
+                    text: 'Save Changes',
+                    isLoading: controller.isLoading.value,
+                    onPressed: () {
+                      controller.saveChanges(
+                        city: cityController.text,
+                        name: nameController.text,
+                        phone: phoneController.text,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

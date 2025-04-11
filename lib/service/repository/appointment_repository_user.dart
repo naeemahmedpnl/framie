@@ -13,6 +13,7 @@ import '../../models/busket_data_model.dart';
 import '../service_constants/configs.dart';
 
 class AppointmentRepositoryUser {
+
   Future<List<AppointmentData>> fetchAllEmployees() async {
     String userId = UserSession.userModel.value.id.toString();
     final Uri url = Uri.parse(
@@ -182,4 +183,51 @@ class AppointmentRepositoryUser {
       };
     }
   }
+
+
+Future<Map<String, dynamic>> deleteAppointment(String appointmentId) async {
+    final Uri url = Uri.parse('$kBaseUrl/api/user/deleteAppointment?appointmentId=$appointmentId');
+    try {
+      log('Deleting appointment with ID: $appointmentId from: $url');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      log('Response status code: ${response.statusCode}');
+      log('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+        if (responseBody['success'] == true) {
+          return {
+            'success': true,
+            'msg': responseBody['msg'] ?? 'Appointment deleted successfully',
+          };
+        } else {
+          log('Failed to delete appointment: ${responseBody['msg']}');
+          return {
+            'success': false,
+            'msg': responseBody['msg'] ?? 'Failed to delete appointment',
+          };
+        }
+      } else {
+        log('Failed to delete appointment: ${response.reasonPhrase}');
+        return {
+          'success': false,
+          'msg': 'Failed to delete appointment: ${response.reasonPhrase}',
+        };
+      }
+    } catch (e) {
+      log('Error deleting appointment: $e');
+      return {
+        'success': false,
+        'msg': 'An error occurred while deleting the appointment',
+      };
+    }
+  }
+
+
+
 }

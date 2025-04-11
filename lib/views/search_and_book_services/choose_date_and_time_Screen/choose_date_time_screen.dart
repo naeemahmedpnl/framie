@@ -50,128 +50,130 @@ class _ChooseDateTimeScreenState extends State<ChooseDateTimeScreen> {
         title: const Text("Choose Date & Time"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.purple,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(
-              children: [
-                // Month Name
-                Obx(
-                  () => Text(
-                    controller.currentMonth.value,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.purple,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: [
+                  // Month Name
+                  Obx(
+                    () => Text(
+                      controller.currentMonth.value,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-
-                // Date Selector Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Left Arrow
-                    IconButton(
-                      icon: const Icon(Icons.arrow_left, color: Colors.white),
-                      onPressed: () => controller.previousMonth(),
-                    ),
-
-                    // Date List
-                    Expanded(
-                      child: Obx(
-                        () => SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:
-                                List.generate(controller.dates.length, (index) {
-                              var date = controller.dates[index];
-                              bool isSelected =
-                                  index == controller.selectedDate.value;
-
-                              return GestureDetector(
-                                onTap: () async {
-                                  controller.selectDate(index);
-                                  // Show Time Picker
-                                  TimeOfDay? pickedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-
-                                  if (pickedTime != null) {
-                                    controller.selectedTime.value =
-                                        pickedTime.format(Get.context!);
-                                    showBottomSheetView(Get.context!);
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        date["day"]!,
-                                        style: TextStyle(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.white70,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 8),
+        
+                  // Date Selector Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Left Arrow
+                      IconButton(
+                        icon: const Icon(Icons.arrow_left, color: Colors.white),
+                        onPressed: () => controller.previousMonth(),
+                      ),
+        
+                      // Date List
+                      Expanded(
+                        child: Obx(
+                          () => SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children:
+                                  List.generate(controller.dates.length, (index) {
+                                var date = controller.dates[index];
+                                bool isSelected =
+                                    index == controller.selectedDate.value;
+        
+                                return GestureDetector(
+                                  onTap: () async {
+                                    controller.selectDate(index);
+                                    // Show Time Picker
+                                    TimeOfDay? pickedTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now(),
+                                    );
+        
+                                    if (pickedTime != null) {
+                                      controller.selectedTime.value =
+                                          pickedTime.format(Get.context!);
+                                      showBottomSheetView(Get.context!);
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          date["day"]!,
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.white70,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        date["weekDay"]!,
-                                        style: TextStyle(
-                                          color: isSelected
-                                              ? Colors.white
-                                              : Colors.white60,
+                                        Text(
+                                          date["weekDay"]!,
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.white60,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }),
+                                );
+                              }),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-
-                    // Right Arrow
-                    IconButton(
-                      icon: const Icon(Icons.arrow_right, color: Colors.white),
-                      onPressed: () => controller.nextMonth(),
-                    ),
-                  ],
-                ),
-              ],
+        
+                      // Right Arrow
+                      IconButton(
+                        icon: const Icon(Icons.arrow_right, color: Colors.white),
+                        onPressed: () => controller.nextMonth(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-
-          // Available Stylists Title
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text("Available Stylists",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+        
+            // Available Stylists Title
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text("Available Stylists",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ),
             ),
-          ),
-
-          const SizedBox(height: 10),
-
-          // Available Stylists List
-          Expanded(
-            child: _buildSalonsView(),
-          )
-        ],
+        
+            const SizedBox(height: 10),
+        
+            // Available Stylists List
+            Expanded(
+              child: _buildSalonsView(),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -210,6 +212,7 @@ class _ChooseDateTimeScreenState extends State<ChooseDateTimeScreen> {
         );
       },
       child: Container(
+
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -229,7 +232,7 @@ class _ChooseDateTimeScreenState extends State<ChooseDateTimeScreen> {
                   const BorderRadius.vertical(top: Radius.circular(12)),
               child: Image.network(
                 'https://appsdemo.pro/Framie/${employee.employeeImage}',
-                height: 140,
+                height: 120,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
@@ -303,7 +306,12 @@ class _ChooseDateTimeScreenState extends State<ChooseDateTimeScreen> {
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.only(
+            bottom: 35,
+            left: 16,
+            right: 16,
+            top: 20,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

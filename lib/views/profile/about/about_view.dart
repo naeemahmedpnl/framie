@@ -33,94 +33,96 @@ class AboutAppView extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
-              _buildListItem(
-                icon: Icons.info_rounded,
-                iconColor: Colors.purple,
-                title: 'About App',
-                onTap: () {
-                  Get.to(() => AboutAppScreen());
-                },
-              ),
-              const Divider(),
-              _buildListItem(
-                icon: Icons.description,
-                iconColor: Colors.purple,
-                title: 'Privacy Policy',
-                onTap: () {
-                  Get.to(() => PrivacyPolicyScreen());
-                },
-              ),
-              const Divider(),
-              _buildListItem(
-                icon: Icons.format_list_bulleted,
-                iconColor: Colors.purple,
-                title: 'Terms & Conditions',
-                onTap: () {
-                  Get.to(() => TermsAndConditionsScreen());
-                },
-              ),
-              const Divider(),
-              _buildListItem(
-                icon: Icons.card_membership,
-                iconColor: Colors.purple,
-                title: 'Licenses',
-                onTap: () {
-                  Get.to(() => LicenseView());
-                },
-              ),
-              const Divider(),
-              _buildListItem(
-                icon: Icons.play_arrow,
-                iconColor: Colors.purple,
-                title: 'Rate us on Play Store',
-                onTap: () {
-                  Get.to(() => RateAppScreen());
-                },
-              ),
-              const Divider(),
-              _buildListItem(
-                icon: Icons.share,
-                iconColor: Colors.purple,
-                title: 'Share App',
-                onTap: controller.shareApp,
-              ),
-              const Divider(),
-              const SizedBox(height: 30),
-              _buildSectionHeader('Follow Us On'),
-              const SizedBox(height: 10),
-              _buildSocialMediaItem(
-                image: 'assets/icons/fb.png',
-                title: 'Facebook',
-                onTap: () => controller.openSocialMedia('facebook'),
-              ),
-              const Divider(),
-              _buildSocialMediaItem(
-                image: 'assets/icons/insta.png',
-                title: 'Instagram',
-                onTap: () => controller.openSocialMedia('instagram'),
-              ),
-              const Divider(),
-              _buildSocialMediaItem(
-                image: 'assets/icons/twitter.png',
-                title: 'Twitter',
-                onTap: () => controller.openSocialMedia('twitter'),
-              ),
-              const Divider(),
-              _buildSocialMediaItem(
-                image: 'assets/icons/linkedin.png',
-                title: 'Linkedin',
-                onTap: () => controller.openSocialMedia('linkedin'),
-              ),
-              const Divider(),
-              const SizedBox(height: 30),
-            ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                _buildListItem(
+                  icon: Icons.info_rounded,
+                  iconColor: Colors.purple,
+                  title: 'About App',
+                  onTap: () {
+                    Get.to(() => AboutAppScreen());
+                  },
+                ),
+                const Divider(),
+                _buildListItem(
+                  icon: Icons.description,
+                  iconColor: Colors.purple,
+                  title: 'Privacy Policy',
+                  onTap: () {
+                    Get.to(() => PrivacyPolicyScreen());
+                  },
+                ),
+                const Divider(),
+                _buildListItem(
+                  icon: Icons.format_list_bulleted,
+                  iconColor: Colors.purple,
+                  title: 'Terms & Conditions',
+                  onTap: () {
+                    Get.to(() => TermsAndConditionsScreen());
+                  },
+                ),
+                const Divider(),
+                _buildListItem(
+                  icon: Icons.card_membership,
+                  iconColor: Colors.purple,
+                  title: 'Licenses',
+                  onTap: () {
+                    Get.to(() => LicenseView());
+                  },
+                ),
+                const Divider(),
+                _buildListItem(
+                  icon: Icons.play_arrow,
+                  iconColor: Colors.purple,
+                  title: 'Rate us on Play Store',
+                  onTap: () {
+                    Get.to(() => RateAppScreen());
+                  },
+                ),
+                const Divider(),
+                _buildListItem(
+                  icon: Icons.share,
+                  iconColor: Colors.purple,
+                  title: 'Share App',
+                  onTap: controller.shareApp,
+                ),
+                const Divider(),
+                const SizedBox(height: 30),
+                _buildSectionHeader('Follow Us On'),
+                const SizedBox(height: 10),
+                _buildSocialMediaItem(
+                  image: 'assets/icons/fb.png',
+                  title: 'Facebook',
+                  onTap: () => controller.openSocialMedia('facebook'),
+                ),
+                const Divider(),
+                _buildSocialMediaItem(
+                  image: 'assets/icons/insta.png',
+                  title: 'Instagram',
+                  onTap: () => controller.openSocialMedia('instagram'),
+                ),
+                const Divider(),
+                _buildSocialMediaItem(
+                  image: 'assets/icons/twitter.png',
+                  title: 'Twitter',
+                  onTap: () => controller.openSocialMedia('twitter'),
+                ),
+                const Divider(),
+                _buildSocialMediaItem(
+                  image: 'assets/icons/linkedin.png',
+                  title: 'Linkedin',
+                  onTap: () => controller.openSocialMedia('linkedin'),
+                ),
+                const Divider(),
+                const SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),

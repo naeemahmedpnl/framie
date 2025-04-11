@@ -48,91 +48,93 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            itemCount: _contents.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return OnboardingPage(
-                content: _contents[index],
-                isLastPage: index == _contents.length - 1,
-                onSkip: () {
-                  if (index == _contents.length - 1) {
-                    // Navigate to sign up page
-                    _navigateToSignUp();
-                  } else {
-                    // Skip to last page
-                    _pageController.animateToPage(
-                      _contents.length - 1,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                onLogin:
-                    index == _contents.length - 1 ? _navigateToLogin : null,
-              );
-            },
-          ),
-          Positioned(
-            bottom: 35,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Hide dots when on last page
-                if (_currentPage != _contents.length - 1)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 24.0),
-                    child: Row(
-                      children: List.generate(
-                        _contents.length,
-                        (index) => _buildDot(index),
-                      ),
-                    ),
-                  ),
-                // Hide skip button when on last page
-                if (_currentPage != _contents.length - 1)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 24.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _pageController.animateToPage(
-                          _contents.length - 1,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                      ),
-                      child: const Text(
-                        'Skip',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _pageController,
+              itemCount: _contents.length,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              itemBuilder: (context, index) {
+                return OnboardingPage(
+                  content: _contents[index],
+                  isLastPage: index == _contents.length - 1,
+                  onSkip: () {
+                    if (index == _contents.length - 1) {
+                      // Navigate to sign up page
+                      _navigateToSignUp();
+                    } else {
+                      // Skip to last page
+                      _pageController.animateToPage(
+                        _contents.length - 1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  },
+                  onLogin:
+                      index == _contents.length - 1 ? _navigateToLogin : null,
+                );
+              },
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 35,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Hide dots when on last page
+                  if (_currentPage != _contents.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 24.0),
+                      child: Row(
+                        children: List.generate(
+                          _contents.length,
+                          (index) => _buildDot(index),
+                        ),
+                      ),
+                    ),
+                  // Hide skip button when on last page
+                  if (_currentPage != _contents.length - 1)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 24.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _pageController.animateToPage(
+                            _contents.length - 1,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        child: const Text(
+                          'Skip',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

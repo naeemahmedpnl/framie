@@ -171,7 +171,7 @@ class _UnifiedBookingScreenState extends State<UnifiedBookingScreen>
                     Icon(Icons.access_time, color: Colors.grey),
                     const SizedBox(width: 8),
                     Text(
-                      "9AM-10PM, Mon -Sun",
+                      "9AM-10PM, Mon -Sasfun",
                       style: TextStyle(color: Colors.grey.shade600),
                     ),
                   ],

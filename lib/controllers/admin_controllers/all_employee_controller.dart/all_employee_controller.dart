@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../../../models/salon.response.model.dart';
 import '../../../service/repository/salon_repository.dart';
-
 class AllEmployeeController extends GetxController {
   var employees = <AllEmployees>[].obs;
   var isLoading = true.obs;
@@ -27,6 +26,40 @@ class AllEmployeeController extends GetxController {
     }
   }
 
+  Future<void> deleteEmployee(String employeeId) async {
+    try {
+      isLoading(true);
+      final result = await _repository.deleteEmployee(employeeId);
+      if (result['success']) {
+        Get.snackbar(
+          'Success',
+          result['msg'],
+          snackPosition: SnackPosition.BOTTOM,
+        
+        );
+        // Remove the employee from the list
+        employees.removeWhere((employee) => employee.id == employeeId);
+      } else {
+        Get.snackbar(
+          'Error',
+          result['msg'],
+          snackPosition: SnackPosition.BOTTOM,
+     
+        );
+      }
+    } catch (e) {
+      log('Error deleting employee: $e');
+      Get.snackbar(
+        'Error',
+        'An error occurred while deleting the employee',
+        snackPosition: SnackPosition.BOTTOM,
+        
+      );
+    } finally {
+      isLoading(false);
+    }
+  }
+
   final SalonRepository _repositorySalons = SalonRepository();
 
   Future<void> fetchSalons() async {
@@ -36,3 +69,4 @@ class AllEmployeeController extends GetxController {
     isLoadingSalon.value = false;
   }
 }
+

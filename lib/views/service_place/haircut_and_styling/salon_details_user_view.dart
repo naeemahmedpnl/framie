@@ -101,40 +101,187 @@ class _SalonDetailsUserViewState extends State<SalonDetailsUserView>
   }
 
   Widget _buildHeader() {
-    return Column(
+  return Column(
+    children: [
+      ClipRRect(
+        child: Image.network(
+          "https://appsdemo.pro/Framie/${widget.employees.employeeImage}",
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, size: 100),
+        ),
+      ),
+      const SizedBox(height: 16),
+      Text(
+        widget.employees.employeeName,
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.purple,
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.star, color: Colors.amber, size: 20),
+          const SizedBox(width: 4),
+          const Text("Not available", style: TextStyle(fontWeight: FontWeight.bold)), // Rating not available in API
+        ],
+      ),
+      Text(
+        "Last Booked: Not available", // Last booked not available in API
+        style: TextStyle(color: Colors.grey.shade600),
+      ),
+    ],
+  );
+}
+
+
+Widget _buildAboutTab() {
+  // Format working days into a string
+  String workingDaysString = widget.employees.workingDays
+      .where((day) => day.isActive)
+      .map((day) => "${day.day}: ${day.startTime}-${day.endTime}")
+      .join(", ");
+
+  // Get the list of days the employee works
+  String daysString = widget.employees.workingDays
+      .where((day) => day.isActive)
+      .map((day) => day.day.substring(0, 3)) // Shorten to "Mon", "Tue", etc.
+      .join("-");
+
+  return SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          child: Image.network(
-            "https://appsdemo.pro/Framie/${widget.employees.employeeImage}",
-            height: 200,
-            width: double.infinity,
-            fit: BoxFit.cover,
+        const SizedBox(height: 16),
+        // Basic Info Section
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.location_on, color: Colors.grey),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Not available", // Location not available in API
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(Icons.access_time, color: Colors.grey),
+                  const SizedBox(width: 8),
+                  Text(
+                    workingDaysString.isNotEmpty
+                        ? "${widget.employees.workingDays.first.startTime}-${widget.employees.workingDays.first.endTime}, $daysString"
+                        : "Not available",
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(Icons.directions_walk, color: Colors.grey),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Not available", // Distance not available in API
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const Icon(Icons.star, color: Colors.amber),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Not available", // Rating not available in API
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          widget.employees.employeeName,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.purple,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            widget.employees.about.isNotEmpty
+                ? widget.employees.about
+                : "No description available",
+            style: TextStyle(color: Colors.grey.shade600),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.star, color: Colors.amber, size: 20),
-            const SizedBox(width: 4),
-            const Text("4.98", style: TextStyle(fontWeight: FontWeight.bold)),
-          ],
+        const SizedBox(height: 16),
+        // Services Section with Arrow
+        _buildInfoRow(
+          icon: Icons.star,
+          title: "Services",
+          content: widget.employees.availableServices.isNotEmpty
+              ? widget.employees.availableServices.map((service) => service.title).join(", ")
+              : "No services available",
+          showArrow: true,
+          iconColor: Colors.purple,
         ),
-        Text(
-          "Last Booked: Today",
-          style: TextStyle(color: Colors.grey.shade600),
+        // Rating Section with Arrow
+        _buildInfoRow(
+          icon: Icons.star,
+          title: "Rating",
+          content: "Not available", // Rating not available in API
+          showArrow: true,
+          iconColor: Colors.purple,
+        ),
+        // Experience Section
+        _buildInfoRow(
+          icon: Icons.school,
+          title: "Experience",
+          content: "Not available", // Experience not available in API
+          showArrow: false,
+          iconColor: Colors.purple,
+        ),
+        // Languages Section
+        _buildInfoRow(
+          icon: Icons.language,
+          title: "Languages",
+          content: "Not available", // Languages not available in API
+          showArrow: false,
+          iconColor: Colors.purple,
+        ),
+        // Certification Section
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              const Icon(Icons.verified, color: Colors.purple),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  "Not available", // Certification status not available in API
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
+
+
+
 
   Widget _buildTabs() {
     return TabBar(
@@ -151,139 +298,63 @@ class _SalonDetailsUserViewState extends State<SalonDetailsUserView>
     );
   }
 
-  Widget _buildAboutTab() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          // Basic Info Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Text(
-                      "No 03,Brooklyn, Los Angeles, California",
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(Icons.access_time, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Text(
-                      "9AM-10PM, Mon -Sun",
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(Icons.directions_walk, color: Colors.grey),
-                    const SizedBox(width: 8),
-                    Text(
-                      "10 Miles away",
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(Icons.star, color: Colors.amber),
-                    const SizedBox(width: 8),
-                    Text(
-                      "4.7 (312)",
-                      style: TextStyle(color: Colors.grey.shade600),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-          ),
-          const SizedBox(height: 16),
-          // Services Section with Arrow
-          _buildInfoRow(
-            icon: Icons.star,
-            title: "Services",
-            content: "Hair Style, Hair Color.",
-            showArrow: true,
-            iconColor: Colors.purple,
-          ),
-          // Rating Section with Arrow
-          _buildInfoRow(
-            icon: Icons.star,
-            title: "RATED 4.92",
-            content: "1250 Reviews",
-            showArrow: true,
-            iconColor: Colors.purple,
-          ),
-          // Experience Section
-          _buildInfoRow(
-            icon: Icons.school,
-            title: "Experience",
-            content: "5 Years",
-            showArrow: false,
-            iconColor: Colors.purple,
-          ),
-          // Languages Section
-          _buildInfoRow(
-            icon: Icons.language,
-            title: "Languages",
-            content: "English, PL",
-            showArrow: false,
-            iconColor: Colors.purple,
-          ),
-          // Certification Section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Icon(Icons.verified, color: Colors.purple),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    "Fully insured and actively certified",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildServicesTab() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        for (ServiceSalon service in widget.services.where((service) =>
-            widget.employees.availableServices.contains(service.id)))
-          _buildServiceCard(service),
-      ],
-    );
-  }
+  return ListView(
+    padding: const EdgeInsets.all(16),
+    children: [
+      for (ServiceSalon service in widget.services.where((service) =>
+          widget.employees.availableServices.any((availableService) =>
+              availableService.id == service.id)))
+        _buildServiceCard(service),
+    ],
+  );
+}
+
+
+
+// Widget _buildBioTab() {
+//   return SingleChildScrollView(
+//     child: Padding(
+//       padding: const EdgeInsets.all(16),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           const Text(
+//             "Bio",
+//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//           ),
+//           const SizedBox(height: 16),
+//           Text(
+//             widget.employees.about.isNotEmpty
+//                 ? widget.employees.about
+//                 : "No bio available",
+//             style: TextStyle(color: Colors.grey.shade600),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
+
+
+
+
+// Widget _buildReviewsTab() {
+//   return ListView(
+//     padding: const EdgeInsets.all(16),
+//     children: [
+//       const Text(
+//         "Reviews",
+//         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+//       ),
+//       Text(
+//         "Not available", // Reviews not available in API
+//         style: TextStyle(color: Colors.grey.shade600),
+//       ),
+//     ],
+//   );
+// }
 
   Widget _buildReviewsTab() {
     return ListView(

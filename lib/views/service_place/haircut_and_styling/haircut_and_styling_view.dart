@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:beauty/views/service_place/haircut_and_styling/view_subservice_user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -318,7 +319,7 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
   Widget _buildTreatmentCard(ServiceSalon salon) {
     return InkWell(
       onTap: () {
-        // Get.to(() => ViewSubServiceForUser(serviceId: salon.id.toString()));
+        Get.to(() => ViewSubServiceForUser(serviceId: salon.id.toString()));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 24),
@@ -450,7 +451,7 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               child: Image.network(
                 'https://appsdemo.pro/Framie/${employee.employeeImage}',
-                height: 140,
+                height: 120,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
@@ -490,6 +491,7 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
                       ),
                     ],
                   ),
+                
                 ],
               ),
             ),
@@ -498,4 +500,7 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
       ),
     );
   }
+
+
+
 }

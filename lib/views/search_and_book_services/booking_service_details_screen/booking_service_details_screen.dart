@@ -31,79 +31,81 @@ class _BookingServiceDetailsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "Booking"),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: SizedBox(
-                width: double.infinity,
-                height: 300,
-                child: Image.network(
-                  "https://appsdemo.pro/Framie/${widget.salon.bannerImage}",
-                  fit: BoxFit.cover,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 300,
+                  child: Image.network(
+                    "https://appsdemo.pro/Framie/${widget.salon.bannerImage}",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              widget.salon.title.toString(),
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.purple,
+              const SizedBox(height: 16),
+              Text(
+                widget.salon.title.toString(),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              widget.salon.text.toString(),
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 16),
-
-            // Dropdowns
-            buildDropdownWithIcon(
-                "assets/images/clock.png",
-                "Duration",
-                controller.durations,
-                controller.selectedDuration,
-                controller.updateDuration,
-                showDropdownIcon: true),
-            const SizedBox(height: 8),
-            buildDropdownWithIcon(
-                "assets/images/person.png",
-                "You've Got",
-                controller.conditions,
-                controller.selectedCondition,
-                controller.updateCondition),
-            const SizedBox(height: 8),
-            buildDropdownWithIcon(
-                "assets/images/pressure.png",
-                "Pressure",
-                controller.pressures,
-                controller.selectedPressure,
-                controller.updatePressure),
-            const SizedBox(height: 16),
-
-            // Sections
-            buildSection("Benefits"),
-            buildSection("Our recommendation"),
-            buildSection("During your treatment"),
-            buildSection("Questions before your treatment?"),
-            buildSection("Probably not the treatment for you if"),
-            const SizedBox(height: 16),
-
-            CustomButton(
-              text: 'Book Now',
-              onPressed: () {
-                showBottomSheetView(context);
-              },
-            ),
-
-            SizedBox(height: 20),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                widget.salon.text.toString(),
+                style: TextStyle(color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 16),
+        
+              // Dropdowns
+              buildDropdownWithIcon(
+                  "assets/images/clock.png",
+                  "Duration",
+                  controller.durations,
+                  controller.selectedDuration,
+                  controller.updateDuration,
+                  showDropdownIcon: true),
+              const SizedBox(height: 8),
+              buildDropdownWithIcon(
+                  "assets/images/person.png",
+                  "You've Got",
+                  controller.conditions,
+                  controller.selectedCondition,
+                  controller.updateCondition),
+              const SizedBox(height: 8),
+              buildDropdownWithIcon(
+                  "assets/images/pressure.png",
+                  "Pressure",
+                  controller.pressures,
+                  controller.selectedPressure,
+                  controller.updatePressure),
+              const SizedBox(height: 16),
+        
+              // Sections
+              buildSection("Benefits"),
+              buildSection("Our recommendation"),
+              buildSection("During your treatment"),
+              buildSection("Questions before your treatment?"),
+              buildSection("Probably not the treatment for you if"),
+              const SizedBox(height: 16),
+        
+              CustomButton(
+                text: 'Book Now',
+                onPressed: () {
+                  showBottomSheetView(context);
+                },
+              ),
+        
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -120,10 +122,10 @@ class _BookingServiceDetailsScreenState
       ),
       builder: (context) {
         return Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(30),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: [ 
               // Title
               Text(
                 "Your Basket",
@@ -213,7 +215,7 @@ class _BookingServiceDetailsScreenState
                 ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
             ],
           ),
         );
