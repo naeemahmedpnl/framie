@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../../controllers/services_view_controller/sub_service/sub_service_details_view_controller.dart';
 
 class ViewSubServiceForUser extends StatefulWidget {
@@ -50,7 +50,7 @@ class _ViewSubServiceForUserState extends State<ViewSubServiceForUser> {
                   children: [
                     ServiceCard(
                       imageUrl:
-                          "Https://appsdemo.pro/Framie/${subServices.subServiceImage.first}",
+                          "https://appsdemo.pro/Framie/${subServices.subServiceImage.first}",
                       title: subServices.title,
                       onAddTap: () {},
                     ),
@@ -88,14 +88,23 @@ class ServiceCard extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-                child: Image.network(
-                  imageUrl,
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    height: 150,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey[200],
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/user_placeholder.png',
+                      fit: BoxFit.cover,
+                      height: 150,
+                      width: double.infinity,
+                    ),
+                  )),
               Positioned(
                 top: 10,
                 right: 10,

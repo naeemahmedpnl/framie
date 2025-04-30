@@ -1,26 +1,51 @@
 {
   "project_info": {
-    "project_number": "166975517763",
-    "project_id": "framie-c1450",
-    "storage_bucket": "framie-c1450.firebasestorage.app"
+    "project_number": "4587000094",
+    "project_id": "framieapp-c79fe",
+    "storage_bucket": "framieapp-c79fe.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:166975517763:android:ff22ffd94020d6aa4090f6",
+        "mobilesdk_app_id": "1:4587000094:android:5a1c5367ba7800838fb90f",
         "android_client_info": {
           "package_name": "com.venturevilla.beauty"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "4587000094-inbel9s45pne87agflt40qr0dmad09u2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.venturevilla.beauty",
+            "certificate_hash": "a18625d6cc1287bfd8c6a3ea04a0b9ba3d1dbd10"
+          }
+        },
+        {
+          "client_id": "4587000094-ummigj9if68lputmi3g31afchm9p2mau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBmshnDqNB7SDmlgjf8FKoWMNnvgbcoOhU"
+          "current_key": "AIzaSyB90GphsQpYbZs9Hmc1_nm643rQ2SZ6_OA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4587000094-ummigj9if68lputmi3g31afchm9p2mau.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "4587000094-fjggv7e3kgln1kea5aoqt4a0t2qeasfu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.venturevilla.beauty"
+              }
+            }
+          ]
         }
       }
     }

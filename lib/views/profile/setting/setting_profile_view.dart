@@ -176,13 +176,13 @@ class _SettingProfileViewState extends State<SettingProfileView> {
                 onTap: () {
                   Get.to(() => ChatWithSupport());
                 }),
-            _buildMenuItem(
-                icon: Icons.language,
-                title: "Language",
-                color: Colors.purple,
-                onTap: () {
-                  Get.toNamed(kLanguagesViewRoute);
-                }),
+            // _buildMenuItem(
+            //     icon: Icons.language,
+            //     title: "Language",
+            //     color: Colors.purple,
+            //     onTap: () {
+            //       Get.toNamed(kLanguagesViewRoute);
+            //     }),
             _buildMenuItem(
                 icon: Icons.info,
                 title: "About The App",

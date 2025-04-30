@@ -30,6 +30,8 @@ class UserSession {
         prefs.getString('userModel') ?? "{}",
       ),
     );
+    log('UserModel: ${userModel.value.toJson()}');
+    log('UserModel: ${userModel.value.toJsonForSession()}');
 
     return userModel.value;
   }
@@ -84,4 +86,62 @@ class UserSession {
     userModel.value = UserModel.empty();
     return (await SharedPreferences.getInstance()).clear();
   }
+
+
+ // Save user data
+  Future<void> saveUserData(UserModel user) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(user.toJson());
+      await prefs.setString('user_data', userData);
+      log('User data saved to local storage');
+    } catch (e) {
+      log('Error saving user data: $e');
+    }
+  }
+  
+  // Get user data
+  Future<UserModel?> getUserData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userData = prefs.getString('user_data');
+      
+      if (userData != null) {
+        return UserModel.fromJson(json.decode(userData));
+      }
+      return null;
+    } catch (e) {
+      log('Error getting user data: $e');
+      return null;
+    }
+  }
+  
+  // Update FCM token for push notifications
+  Future<void> updateFcmToken(String token) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('fcm_token', token);
+      log('FCM token saved: $token');
+    } catch (e) {
+      log('Error saving FCM token: $e');
+    }
+  }
+  
+  // Get FCM token
+  Future<String?> getFcmToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getString('fcm_token');
+    } catch (e) {
+      log('Error getting FCM token: $e');
+      return null;
+    }
+  }
+
+
+
+
+
+
+
 }

@@ -1,3 +1,5 @@
+import 'package:beauty/views/profile/help/chatlist_screen.dart';
+import 'package:beauty/views/profile/help/chat.dart';
 import 'package:get/get.dart';
 
 import '/views/auth/login/login_screen.dart';
@@ -14,7 +16,7 @@ import '../../views/profile/account/account_setting_view.dart';
 import '../../views/profile/address/add_address_view.dart';
 import '../../views/profile/address/edit_address_view.dart';
 import '../../views/profile/address/myaddress_view.dart';
-import '../../views/profile/help/help_view.dart';
+
 import '../../views/profile/language/language_view.dart';
 import '../../views/profile/setting/setting_profile_view.dart';
 import '../../views/profile/wallet/add_new_payment_view.dart';
@@ -75,6 +77,11 @@ class RouteGenerator {
         page: () => const BookingDetailsScreen(),
         binding: ControllerBinder(),
       ),
+      //  GetPage(
+      //   name: kBookingDetailsViewRoute,
+      //   page: () => const BookingDetailsScreen(),
+      //   binding: ControllerBinder(),
+      // ),
       GetPage(
         name: kLoginViewRoute,
         page: () => const LoginScreen(),
@@ -149,9 +156,17 @@ class RouteGenerator {
         page: () => const PaymentMethodScreen(),
         binding: ControllerBinder(),
       ),
+
+      GetPage(
+        name: '/chat/:chatId/:recipientName',
+        page: () => ChatScreen(
+          chatId: Get.parameters['chatId']!,
+          recipientName: Get.parameters['recipientName']!,
+        ),
+      ),
       GetPage(
         name: kHelpViewControllerRoute,
-        page: () => const HelpView(),
+        page: () =>  ChatsListScreen(),
         binding: ControllerBinder(),
       ),
       GetPage(

@@ -23,9 +23,11 @@ class SalonServicesModel {
 class ServiceSalon {
   String? id;
   String? adminId;
+  String? serviceId;
   String? title;
   String? text;
   String? bannerImage;
+  int? price;
   String? createdAt;
   String? updatedAt;
   int? v;
@@ -33,9 +35,11 @@ class ServiceSalon {
   ServiceSalon({
     this.id,
     this.adminId,
+    this.serviceId,
     this.title,
     this.text,
     this.bannerImage,
+    this.price,
     this.createdAt,
     this.updatedAt,
     this.v,
@@ -45,9 +49,15 @@ class ServiceSalon {
     return ServiceSalon(
       id: json['_id'],
       adminId: json['adminId'],
-      title: json['Title'],
+      serviceId: json['serviceId'],
+      title:
+          json['Title'] ?? json['title'],
       text: json['text'],
-      bannerImage: json['bannerImage'],
+      bannerImage:
+          json['subServiceImage'] != null && json['subServiceImage'].isNotEmpty
+              ? json['subServiceImage'][0]
+              : json['bannerImage'], // Try both field names
+      price: json['price']?.toDouble(),
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       v: json['__v'],

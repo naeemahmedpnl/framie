@@ -28,7 +28,7 @@ class _ViewAllSubServiceByAdminIdScreenState
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text("Sub Services", style: TextStyle(color: Colors.black)),
+        title: Text("Sub Servicesdfsdfsd", style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
       body: Obx(() {

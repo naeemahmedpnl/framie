@@ -9,5 +9,7 @@ const kAdminLoginUrl = '$kBaseUrl/api/admin/login';
 const kGenerateOTPUrl = '$kBaseUrl/api/user/OTP';
 const kVerifyOTPUrl = '$kBaseUrl/api/user/verifyOTP';
 
-const KAllEmployessUrl = '$kBaseUrl//api/admin/getAllEmployees';
+const kSignInWithGoogle = '$kBaseUrl/api/user/signUpWithGoogle';
+
+const KAllEmployessUrl = '$kBaseUrl/api/admin/getAllEmployees';
 

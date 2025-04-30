@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:beauty/models/admin_models/all_employees_model.dart';
+import 'package:beauty/models/sub_services_salon_model.dart';
 import 'package:beauty/service/user_session/user_session.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -255,4 +256,82 @@ Future<Map<String, dynamic>> deleteEmployee(String employeeId) async {
       };
     }
   }
+
+
+
+Future<Employees?> getEmployeeDetails(String employeeId) async {
+  final Uri url = Uri.parse('$kBaseUrl/api/admin/getEmployee?employeeId=$employeeId');
+  try {
+    log('Fetching employee details from: $url');
+    String token = await UserSession().getUserToken();
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Bearer $token'}
+    );
+    
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      
+      if (responseBody['sucess'] == true) {
+        // Parse the employee with the corrected model
+        Employees employee = Employees.fromJson(responseBody['data']);
+        
+        // Now load the available service details for each service ID
+        List<AvailableService> populatedServices = [];
+        for (var service in employee.availableServices) {
+          // Fetch service details
+          final serviceDetails = await getServiceDetails(service.id);
+          if (serviceDetails != null) {
+            populatedServices.add(serviceDetails);
+          }
+        }
+        
+        // Create a new employee object with populated services
+        return Employees(
+          id: employee.id,
+          createdBy: employee.createdBy,
+          employeeName: employee.employeeName,
+          about: employee.about,
+          availableServices: populatedServices,
+          workingDays: employee.workingDays,
+          employeeImage: employee.employeeImage,
+        );
+      } else {
+        log('Failed to fetch employee details: ${responseBody['msg']}');
+        return null;
+      }
+    } else {
+      log('Failed to fetch employee details: ${response.reasonPhrase}');
+      return null;
+    }
+  } catch (e) {
+    log('Error fetching employee details: $e');
+    return null;
+  }
+}
+
+// Add this method to fetch service details
+Future<AvailableService?> getServiceDetails(String serviceId) async {
+  final Uri url = Uri.parse('$kBaseUrl/api/admin/getService?serviceId=$serviceId');
+  try {
+    String token = await UserSession().getUserToken();
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Bearer $token'}
+    );
+    
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      if (responseBody['success'] == true) {
+        return AvailableService.fromJson(responseBody['data']);
+      }
+    }
+    return null;
+  } catch (e) {
+    log('Error fetching service details: $e');
+    return null;
+  }
+}
+
+
 }

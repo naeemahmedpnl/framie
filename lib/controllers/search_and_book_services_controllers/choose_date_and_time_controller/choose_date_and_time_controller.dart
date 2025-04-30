@@ -52,7 +52,7 @@ class ChooseDateTimeController extends GetxController {
       if (result['success']) {
         Get.snackbar(
           'Success',
-          'Service Placed in Basket',
+          'Service Booked Successfully',
         );
         Get.offAll(() => NavigationMenu());
       } else {

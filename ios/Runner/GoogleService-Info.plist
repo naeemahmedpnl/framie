@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>4587000094-fjggv7e3kgln1kea5aoqt4a0t2qeasfu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.4587000094-fjggv7e3kgln1kea5aoqt4a0t2qeasfu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBuPTUePL6_uyzp2Yrtj2aBFaxzL8c2kZE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>4587000094</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.venturevilla.beauty</string>
+	<key>PROJECT_ID</key>
+	<string>framieapp-c79fe</string>
+	<key>STORAGE_BUCKET</key>
+	<string>framieapp-c79fe.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:4587000094:ios:103a631888eb299f8fb90f</string>
+</dict>
+</plist>

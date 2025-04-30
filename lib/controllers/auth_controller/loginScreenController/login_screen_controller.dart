@@ -50,8 +50,7 @@ class LoginController extends GetxController {
         final userData = response['data'];
         UserModel user = UserModel.fromJson(userData);
 
-        // await UserSession().saveUser(user);
-        // UserSession.userModel.value = user;
+   
 
         BeautyLoaders.successSnackBar(
           title: 'Success',

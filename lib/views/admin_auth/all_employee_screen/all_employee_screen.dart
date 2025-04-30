@@ -44,9 +44,23 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
       ),
       body: _body(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(() => CreateEmployeeScreen(serviceSalon: controller.salons));
-          controller.fetchEmployees(widget.adminId);
+        onPressed: () async {
+          // Make sure salons are loaded
+          if (controller.salons.isEmpty) {
+            await controller.fetchSalons();
+          }
+
+          if (controller.salons.isNotEmpty) {
+            Get.to(() => CreateEmployeeScreen(serviceSalon: controller.salons));
+            controller.fetchEmployees(widget.adminId);
+          } else {
+            Get.snackbar(
+              'Error',
+              'Unable to load services. Please try again.',
+              backgroundColor: Colors.red,
+              colorText: Colors.white,
+            );
+          }
         },
         shape: CircleBorder(),
         backgroundColor: Colors.purple,
@@ -55,6 +69,18 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           color: Colors.white,
         ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Get.to(() => CreateEmployeeScreen(serviceSalon: controller.salons));
+      //     controller.fetchEmployees(widget.adminId);
+      //   },
+      //   shape: CircleBorder(),
+      //   backgroundColor: Colors.purple,
+      //   child: Icon(
+      //     Icons.add,
+      //     color: Colors.white,
+      //   ),
+      // ),
     );
   }
 
@@ -74,398 +100,418 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           final employee = controller.employees[index];
 
           return Dismissible(
-  key: Key(employee.id),
-  direction: DismissDirection.endToStart,
-  background: Container(
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [Colors.redAccent, Colors.red],
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-      ),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    alignment: Alignment.centerRight,
-    padding: const EdgeInsets.only(right: 20),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          'Delete',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 24,
-        ),
-      ],
-    ),
-  ),
-  confirmDismiss: (direction) async {
-    return await _showDeleteConfirmationDialog(context);
-  },
-  onDismissed: (direction) async {
-    // Store the deleted employee for potential undo
-    final deletedEmployee = employee;
-    final deletedIndex = controller.employees.indexOf(employee);
-    // Remove the employee from the list temporarily
-    controller.employees.removeAt(deletedIndex);
-
-    // Show a snackbar with an undo option
-    Get.snackbar(
-      'Employee Deleted',
-      '${deletedEmployee.employeeName} has been deleted.',
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 5),
-      mainButton: TextButton(
-        onPressed: () {
-          // Undo the deletion
-          controller.employees.insert(deletedIndex, deletedEmployee);
-          Get.closeAllSnackbars();
-        },
-        child: const Text(
-          'Undo',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-
-    // Proceed with the API deletion
-    await controller.deleteEmployee(employee.id
-    // , 
-    // onError: () {
-    //   // If deletion fails, restore the employee
-    //   controller.employees.insert(deletedIndex, deletedEmployee);
-    //   Get.snackbar(
-    //     'Error',
-    //     'Failed to delete employee. Restored.',
-    //     snackPosition: SnackPosition.BOTTOM,
-    //     backgroundColor: Colors.red,
-    //     colorText: Colors.white,
-    //   );
-    // }
-    
-    );
-  },
-  child: Card(
-    // Modern card design as provided in your previous message
-    color: Colors.white,
-    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    elevation: 6,
-    shadowColor: Colors.grey.withOpacity(0.2),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
+            key: Key(employee.id),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.redAccent, Colors.red],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
                 borderRadius: BorderRadius.circular(16),
-                child: Stack(
-                  children: [
-                    Image.network(
-                      "https://appsdemo.pro/Framie/${employee.employeeImage}",
-                      height: 180,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset(
-                          'assets/images/user_placeholder.png',
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-                    Container(
-                      height: 180,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.black.withOpacity(0.1),
-                            Colors.black.withOpacity(0.5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
-              Positioned(
-                bottom: 16,
-                left: 16,
-                child: Text(
-                  employee.employeeName,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black45,
-                        offset: Offset(1, 1),
-                        blurRadius: 3,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 10,
-                top: 10,
-                child: CircleAvatar(
-                  backgroundColor: const Color(0xFF8B1F8F),
-                  radius: 20,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.edit,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Delete',
+                    style: TextStyle(
                       color: Colors.white,
-                      size: 20,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
-                    onPressed: () {
-                      Get.to(() => EditEmployeeScreen(
-                            employeeId: employee.id,
-                            emplyee: AllEmployees(
-                              createdBy: employee.id,
-                              employeeImage: employee.employeeImage,
-                              id: employee.id,
-                              employeeName: employee.employeeName,
-                              about: employee.about,
-                              availableServices: employee.availableServices,
-                              workingDays: employee.workingDays,
-                            ),
-                            serviceSalon: controller.salons,
-                          ))?.then((_) =>
-                          controller.fetchEmployees(widget.adminId));
-                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                ],
+              ),
+            ),
+            confirmDismiss: (direction) async {
+              return await _showDeleteConfirmationDialog(context);
+            },
+            onDismissed: (direction) async {
+              // Store the deleted employee for potential undo
+              final deletedEmployee = employee;
+              final deletedIndex = controller.employees.indexOf(employee);
+              // Remove the employee from the list temporarily
+              controller.employees.removeAt(deletedIndex);
+
+              // Show a snackbar with an undo option
+              Get.snackbar(
+                'Employee Deleted',
+                '${deletedEmployee.employeeName} has been deleted.',
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+                duration: const Duration(seconds: 5),
+                mainButton: TextButton(
+                  onPressed: () {
+                    // Undo the deletion
+                    controller.employees.insert(deletedIndex, deletedEmployee);
+                    Get.closeAllSnackbars();
+                  },
+                  child: const Text(
+                    'Undo',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                Icons.info_outline,
-                color: Color(0xFF8B1F8F),
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  employee.about,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    height: 1.5,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                  size: 24,
-                ),
-                onPressed: () async {
-                  final confirm = await _showDeleteConfirmationDialog(context);
-                  if (confirm) {
-                    // Store the deleted employee for potential undo
-                    final deletedEmployee = employee;
-                    final deletedIndex = controller.employees.indexOf(employee);
-                    // Remove the employee from the list temporarily
-                    controller.employees.removeAt(deletedIndex);
+              );
 
-                    // Show a snackbar with an undo option
-                    Get.snackbar(
-                      'Employee Deleted',
-                      '${deletedEmployee.employeeName} has been deleted.',
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Colors.red,
-                      colorText: Colors.white,
-                      duration: const Duration(seconds: 5),
-                      mainButton: TextButton(
-                        onPressed: () {
-                          // Undo the deletion
-                          controller.employees
-                              .insert(deletedIndex, deletedEmployee);
-                          Get.closeAllSnackbars();
-                        },
-                        child: const Text(
-                          'Undo',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    );
+              // Proceed with the API deletion
+              await controller.deleteEmployee(employee.id
+                  // ,
+                  // onError: () {
+                  //   // If deletion fails, restore the employee
+                  //   controller.employees.insert(deletedIndex, deletedEmployee);
+                  //   Get.snackbar(
+                  //     'Error',
+                  //     'Failed to delete employee. Restored.',
+                  //     snackPosition: SnackPosition.BOTTOM,
+                  //     backgroundColor: Colors.red,
+                  //     colorText: Colors.white,
+                  //   );
+                  // }
 
-                    // Proceed with the API deletion
-                    await controller.deleteEmployee(employee.id
-                    // , onError: () {
-                    //   // If deletion fails, restore the employee
-                    //   controller.employees
-                    //       .insert(deletedIndex, deletedEmployee);
-                    //   Get.snackbar(
-                    //     'Error',
-                    //     'Failed to delete employee. Restored.',
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //     backgroundColor: Colors.red,
-                    //     colorText: Colors.white,
-                    //   );
-                    // }
-                    );
-                  }
-                },
+                  );
+            },
+            child: Card(
+              // Modern card design as provided in your previous message
+              color: Colors.white,
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              elevation: 6,
+              shadowColor: Colors.grey.withOpacity(0.2),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                Icons.work_outline,
-                color: Color(0xFF8B1F8F),
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Services",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Obx(
-                      () => Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: controller.salons
-                            .where((service) => employee.availableServices
-                                .contains(service.id))
-                            .map((service) => Chip(
-                                  label: Text(
-                                    service.title.toString(),
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  backgroundColor:
-                                      const Color(0xFF8B1F8F).withOpacity(0.1),
-                                  labelStyle: const TextStyle(
-                                    color: Color(0xFF8B1F8F),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                    side: const BorderSide(
-                                      color: Color(0xFF8B1F8F),
-                                      width: 0.5,
+                    Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Stack(
+                            children: [
+                              employee.employeeImage.isNotEmpty
+                                  ? Image.network(
+                                      "https://appsdemo.pro/Framie/${employee.employeeImage}",
+                                      height: 180,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Image.asset(
+                                          'assets/images/user_placeholder.png',
+                                          height: 180,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    )
+                                  : Image.asset(
+                                      'assets/images/user_placeholder.png',
+                                      height: 180,
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
                                     ),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 4),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(
-                Icons.calendar_today,
-                color: Color(0xFF8B1F8F),
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Working Days",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...employee.workingDays.map((day) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              day.day,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "${day.startTime} - ${day.endTime}",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
+                              Container(
+                                height: 180,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.1),
+                                      Colors.black.withOpacity(0.5),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
-                                Icon(
-                                  day.isActive
-                                      ? Icons.check_circle
-                                      : Icons.cancel,
-                                  color: day.isActive ? Colors.green : Colors.red,
-                                  size: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 16,
+                          left: 16,
+                          child: Text(
+                            employee.employeeName,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black45,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 3,
                                 ),
                               ],
                             ),
-                          ],
+                          ),
                         ),
-                      );
-                    }).toList(),
+                        Positioned(
+                          right: 10,
+                          top: 10,
+                          child: CircleAvatar(
+                            backgroundColor: const Color(0xFF8B1F8F),
+                            radius: 20,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                Get.to(() => EditEmployeeScreen(
+                                          employeeId: employee.id,
+                                          emplyee: AllEmployees(
+                                            createdBy: employee.id,
+                                            employeeImage:
+                                                employee.employeeImage,
+                                            id: employee.id,
+                                            employeeName: employee.employeeName,
+                                            about: employee.about,
+                                            availableServices:
+                                                employee.availableServices,
+                                            workingDays: employee.workingDays,
+                                          ),
+                                          serviceSalon: controller.salons,
+                                        ))
+                                    ?.then((_) => controller
+                                        .fetchEmployees(widget.adminId));
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Color(0xFF8B1F8F),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            employee.about,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 24,
+                          ),
+                          onPressed: () async {
+                            final confirm =
+                                await _showDeleteConfirmationDialog(context);
+                            if (confirm) {
+                              // Store the deleted employee for potential undo
+                              final deletedEmployee = employee;
+                              final deletedIndex =
+                                  controller.employees.indexOf(employee);
+                              // Remove the employee from the list temporarily
+                              controller.employees.removeAt(deletedIndex);
+
+                              // Show a snackbar with an undo option
+                              Get.snackbar(
+                                'Employee Deleted',
+                                '${deletedEmployee.employeeName} has been deleted.',
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                                duration: const Duration(seconds: 5),
+                                mainButton: TextButton(
+                                  onPressed: () {
+                                    // Undo the deletion
+                                    controller.employees
+                                        .insert(deletedIndex, deletedEmployee);
+                                    Get.closeAllSnackbars();
+                                  },
+                                  child: const Text(
+                                    'Undo',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              );
+
+                              // Proceed with the API deletion
+                              await controller.deleteEmployee(employee.id
+                                  // , onError: () {
+                                  //   // If deletion fails, restore the employee
+                                  //   controller.employees
+                                  //       .insert(deletedIndex, deletedEmployee);
+                                  //   Get.snackbar(
+                                  //     'Error',
+                                  //     'Failed to delete employee. Restored.',
+                                  //     snackPosition: SnackPosition.BOTTOM,
+                                  //     backgroundColor: Colors.red,
+                                  //     colorText: Colors.white,
+                                  //   );
+                                  // }
+                                  );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.work_outline,
+                          color: Color(0xFF8B1F8F),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Services",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Obx(
+                                () => Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: controller.salons
+                                      .where((service) => employee
+                                          .availableServices
+                                          .contains(service.id))
+                                      .map((service) => Chip(
+                                            label: Text(
+                                              service.title.toString(),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            ),
+                                            backgroundColor:
+                                                const Color(0xFF8B1F8F)
+                                                    .withOpacity(0.1),
+                                            labelStyle: const TextStyle(
+                                              color: Color(0xFF8B1F8F),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              side: const BorderSide(
+                                                color: Color(0xFF8B1F8F),
+                                                width: 0.5,
+                                              ),
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 4),
+                                          ))
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(
+                          Icons.calendar_today,
+                          color: Color(0xFF8B1F8F),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                "Working Days",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              ...employee.workingDays.map((day) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        day.day,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "${day.startTime} - ${day.endTime}",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Icon(
+                                            day.isActive
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: day.isActive
+                                                ? Colors.green
+                                                : Colors.red,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  ),
-);
-          
-          
+            ),
+          );
+
           // Dismissible(
           //   key: Key(employee.id),
           //   direction: DismissDirection.endToStart,
@@ -486,7 +532,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           //   },
           //   child: Card(
           //     color: Colors.white,
-            
+
           //     shadowColor: Colors.grey.withOpacity(0.5),
           //     margin: const EdgeInsets.all(10),
           //     elevation: 2,
@@ -628,9 +674,6 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
           //     ),
           //   ),
           // );
-       
-       
-       
         },
       );
     });

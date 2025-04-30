@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:beauty/service/auth_service.dart';
+import 'package:beauty/service/network_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +20,70 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final LoginController controller = Get.put(LoginController());
 
+  final GoogleSignInController _authService = GoogleSignInController();
+  bool _isLoading = false;
+
+Future<void> _handleGoogleSignIn() async {
+  // Define a local function to handle sign out
+  Future<void> signOut() async {
+    log('Signing out from Google');
+    try {
+      await _authService.signOut();
+      log('Successfully signed out from Google');
+    } catch (e) {
+      log('Error during sign out: $e');
+      // Continue with sign-in process even if sign-out fails
+    }
+  }
+
+  try {
+    // First check network connectivity
+    if (!await NetworkManager().isConnected()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please connect to the internet')),
+      );
+      return;
+    }
+
+    log('Checking if user is already signed in');
+    final isSignedIn = await _authService.isSignedIn();
+    if (isSignedIn) {
+      log('User is already signed in, signing out');
+      await signOut();
+    }
+
+    log('Starting Google Sign-In process');
+    setState(() {
+      _isLoading = true;
+      log('Set loading state to true');
+    });
+
+    log('Calling Google Sign-In handler');
+    await _authService.handleGoogleSignIn();
+    
+
+  } catch (e) {
+    log('Error during Google Sign-In: $e');
+    log('Stack trace: ${StackTrace.current}');
+
+    // Show a more user-friendly error message
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Sign in failed. Please try again later.'),
+        backgroundColor: Colors.red,
+      ),
+    );
+  } finally {
+    log('Sign-in process completed, resetting loading state');
+    if (mounted) {  // Check if the widget is still in the tree
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+}
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,29 +135,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                _buildSocialButton(
-                  icon: "assets/images/google_icon.png",
-                  text: 'signWithGoogle'.tr,
-                  backgroundColor: Colors.white,
-                  borderColor: Colors.black12,
-                  textColor: Colors.black,
-                ),
-                const SizedBox(height: 12),
-                _buildSocialButton(
-                  icon: "assets/images/apple_icon.png",
-                  text: 'signWithApple'.tr,
-                  backgroundColor: Colors.black,
-                  borderColor: Colors.black,
-                  textColor: Colors.white,
-                ),
-                const SizedBox(height: 12),
-                _buildSocialButton(
-                  icon: "assets/images/facebook_icon.png",
-                  text: 'signWithFacebook'.tr,
-                  backgroundColor: Colors.white,
-                  borderColor: Colors.black12,
-                  textColor: Colors.black,
-                ),
+                  _buildSocialButton(
+              isLoading: _isLoading,
+               onPressed: _handleGoogleSignIn,
+              icon: "assets/images/google_icon.png",
+              text: "Sign in with Google",
+              backgroundColor: Colors.white,
+              borderColor: Colors.black12,
+              textColor: Colors.black,
+            ),
+            const SizedBox(height: 12),
+            _buildSocialButton(
+              isLoading: false,
+               onPressed: (){},
+              icon: "assets/images/apple_icon.png",
+              text: "Sign in with Apple",
+              backgroundColor: Colors.black,
+              borderColor: Colors.black,
+              textColor: Colors.white,
+            ),
+            const SizedBox(height: 12),
               ],
             ),
           ],
@@ -124,14 +189,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSocialButton({
-    required String icon,
-    required String text,
-    required Color backgroundColor,
-    required Color borderColor,
-    required Color textColor,
-  }) {
-    return Container(
+    Widget _buildSocialButton({
+  required bool isLoading,
+  required VoidCallback onPressed,
+  required String icon,
+  required String text,
+  required Color backgroundColor,
+  required Color borderColor,
+  required Color textColor,
+}) {
+  return GestureDetector( 
+    onTap: isLoading ? null : onPressed,
+    child: Container(
       width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
@@ -142,17 +211,27 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(icon, width: 24, height: 24),
+          if (isLoading)
+            SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(textColor),
+              ),
+            )
+          else
+            Image.asset(icon, width: 24, height: 24),
           const SizedBox(width: 10),
           Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.w600,
-            ),
+            isLoading ? "Loading..." : text,
+            style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+ 
 }

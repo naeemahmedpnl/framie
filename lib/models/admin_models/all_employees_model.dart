@@ -1,4 +1,5 @@
 
+
 class AllEmployees {
   final String id;
   final String createdBy;
@@ -45,6 +46,7 @@ class AllEmployees {
         "employeeImage": employeeImage,
       };
 }
+
 
 
 class AvailableService {
@@ -97,4 +99,55 @@ class WorkingDay {
         "endTime": endTime,
         "_id": id,
       };
+}
+
+
+
+
+class Employees {
+  final String id;
+  final String createdBy;
+  final String employeeName;
+  final String about;
+  final List<AvailableService> availableServices;
+  final List<WorkingDay> workingDays;
+  final String employeeImage;
+
+  Employees({
+    required this.id,
+    required this.createdBy,
+    required this.employeeName,
+    required this.about,
+    required this.availableServices,
+    required this.workingDays,
+    required this.employeeImage,
+  });
+
+  factory Employees.fromJson(Map<String, dynamic> json) {
+  // Handle availableServices as string IDs
+  List<AvailableService> services = [];
+  if (json["availableServices"] != null) {
+    services = (json["availableServices"] as List<dynamic>)
+        .map((id) => AvailableService(id: id.toString(), title: ""))
+        .toList();
+  }
+
+  // Handle workingDays
+  List<WorkingDay> workingDays = [];
+  if (json["workinDays"] != null) {
+    workingDays = (json["workinDays"] as List<dynamic>)
+        .map((x) => WorkingDay.fromJson(x))
+        .toList();
+  }
+
+  return Employees(
+    id: json["_id"] ?? "",
+    createdBy: json["createdBy"] ?? "",
+    employeeName: json["employeeName"] ?? "",
+    about: json["about"] ?? "",
+    availableServices: services,
+    workingDays: workingDays,
+    employeeImage: json["employeeImage"] ?? "",
+  );
+}
 }

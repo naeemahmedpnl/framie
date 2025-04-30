@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:beauty/views/service_place/haircut_and_styling/sub_services.dart';
 import 'package:beauty/views/service_place/haircut_and_styling/view_subservice_user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
@@ -319,7 +321,12 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
   Widget _buildTreatmentCard(ServiceSalon salon) {
     return InkWell(
       onTap: () {
-        Get.to(() => ViewSubServiceForUser(serviceId: salon.id.toString()));
+        Get.to(() => SubServicesView(
+              serviceId: salon.id.toString(),
+              // employee: controller.employees.isNotEmpty ? controller.employees.first : null,
+            ));
+
+        // Get.to(() => ViewSubServiceForUser(serviceId: salon.id.toString()));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 24),
@@ -340,8 +347,9 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
-                    'https://appsdemo.pro/Framie/${salon.bannerImage}',
+                  child: CachedNetworkImage(
+                    imageUrl:
+                        'https://appsdemo.pro/Framie/${salon.bannerImage}',
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -429,6 +437,7 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
           () => SalonDetailsUserView(
             employees: employee,
             services: controller.salons,
+            adminId: widget.adminId,
           ),
         );
       },
@@ -491,7 +500,6 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
                       ),
                     ],
                   ),
-                
                 ],
               ),
             ),
@@ -500,7 +508,4 @@ class _HairCutAndStylingViewState extends State<HairCutAndStylingView> {
       ),
     );
   }
-
-
-
 }

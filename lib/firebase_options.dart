@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBEVjSJM_nl3cqs-Tq2wRS8teOrRfkvVxE',
-    appId: '1:166975517763:web:9ab779f90765798f4090f6',
-    messagingSenderId: '166975517763',
-    projectId: 'framie-c1450',
-    authDomain: 'framie-c1450.firebaseapp.com',
-    storageBucket: 'framie-c1450.firebasestorage.app',
-    measurementId: 'G-LZ8P2CWBHS',
+    apiKey: 'AIzaSyBTogGgWY58iojyr29CzQ6vMyhCGG72A0Y',
+    appId: '1:4587000094:web:c2e55ef0f5a23b388fb90f',
+    messagingSenderId: '4587000094',
+    projectId: 'framieapp-c79fe',
+    authDomain: 'framieapp-c79fe.firebaseapp.com',
+    storageBucket: 'framieapp-c79fe.firebasestorage.app',
+    measurementId: 'G-SQ2TS2C56F',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBmshnDqNB7SDmlgjf8FKoWMNnvgbcoOhU',
-    appId: '1:166975517763:android:ff22ffd94020d6aa4090f6',
-    messagingSenderId: '166975517763',
-    projectId: 'framie-c1450',
-    storageBucket: 'framie-c1450.firebasestorage.app',
+    apiKey: 'AIzaSyB90GphsQpYbZs9Hmc1_nm643rQ2SZ6_OA',
+    appId: '1:4587000094:android:5a1c5367ba7800838fb90f',
+    messagingSenderId: '4587000094',
+    projectId: 'framieapp-c79fe',
+    storageBucket: 'framieapp-c79fe.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD_bggbR6ggHzgDi5NaIIPRpyZfOJEzAjY',
-    appId: '1:166975517763:ios:bd9957f9496081184090f6',
-    messagingSenderId: '166975517763',
-    projectId: 'framie-c1450',
-    storageBucket: 'framie-c1450.firebasestorage.app',
+    apiKey: 'AIzaSyBuPTUePL6_uyzp2Yrtj2aBFaxzL8c2kZE',
+    appId: '1:4587000094:ios:103a631888eb299f8fb90f',
+    messagingSenderId: '4587000094',
+    projectId: 'framieapp-c79fe',
+    storageBucket: 'framieapp-c79fe.firebasestorage.app',
     iosBundleId: 'com.venturevilla.beauty',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD_bggbR6ggHzgDi5NaIIPRpyZfOJEzAjY',
-    appId: '1:166975517763:ios:bd9957f9496081184090f6',
-    messagingSenderId: '166975517763',
-    projectId: 'framie-c1450',
-    storageBucket: 'framie-c1450.firebasestorage.app',
+    apiKey: 'AIzaSyBuPTUePL6_uyzp2Yrtj2aBFaxzL8c2kZE',
+    appId: '1:4587000094:ios:103a631888eb299f8fb90f',
+    messagingSenderId: '4587000094',
+    projectId: 'framieapp-c79fe',
+    storageBucket: 'framieapp-c79fe.firebasestorage.app',
     iosBundleId: 'com.venturevilla.beauty',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBEVjSJM_nl3cqs-Tq2wRS8teOrRfkvVxE',
-    appId: '1:166975517763:web:92cfa7a3d810c8b64090f6',
-    messagingSenderId: '166975517763',
-    projectId: 'framie-c1450',
-    authDomain: 'framie-c1450.firebaseapp.com',
-    storageBucket: 'framie-c1450.firebasestorage.app',
-    measurementId: 'G-PX1JTEDETC',
+    apiKey: 'AIzaSyBTogGgWY58iojyr29CzQ6vMyhCGG72A0Y',
+    appId: '1:4587000094:web:dcbe8c52cf0ebca68fb90f',
+    messagingSenderId: '4587000094',
+    projectId: 'framieapp-c79fe',
+    authDomain: 'framieapp-c79fe.firebaseapp.com',
+    storageBucket: 'framieapp-c79fe.firebasestorage.app',
+    measurementId: 'G-6ED0D812TL',
   );
+
 }

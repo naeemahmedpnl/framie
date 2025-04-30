@@ -1,15 +1,25 @@
+import 'dart:developer';
+
+import 'package:beauty/service/chatService.dart';
+import 'package:beauty/service/user_session/user_session.dart';
+import 'package:beauty/utils/constants/view_consants.dart';
+import 'package:beauty/views/profile/help/chat.dart';
+import 'package:beauty/views/service_place/haircut_and_styling/sub_services.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../models/admin_models/all_employees_model.dart';
 import '../../../models/salon.response.model.dart';
-import 'confirm_booking_stylist_view.dart';
 
 class SalonDetailsUserView extends StatefulWidget {
   final AllEmployees employees;
   final List<ServiceSalon> services;
+  final String adminId;
   const SalonDetailsUserView({
     super.key,
+    required this.adminId,
     required this.employees,
     required this.services,
   });
@@ -101,187 +111,236 @@ class _SalonDetailsUserViewState extends State<SalonDetailsUserView>
   }
 
   Widget _buildHeader() {
-  return Column(
-    children: [
-      ClipRRect(
-        child: Image.network(
-          "https://appsdemo.pro/Framie/${widget.employees.employeeImage}",
-          height: 200,
-          width: double.infinity,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, size: 100),
-        ),
-      ),
-      const SizedBox(height: 16),
-      Text(
-        widget.employees.employeeName,
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: Colors.purple,
-        ),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.star, color: Colors.amber, size: 20),
-          const SizedBox(width: 4),
-          const Text("Not available", style: TextStyle(fontWeight: FontWeight.bold)), // Rating not available in API
-        ],
-      ),
-      Text(
-        "Last Booked: Not available", // Last booked not available in API
-        style: TextStyle(color: Colors.grey.shade600),
-      ),
-    ],
-  );
-}
-
-
-Widget _buildAboutTab() {
-  // Format working days into a string
-  String workingDaysString = widget.employees.workingDays
-      .where((day) => day.isActive)
-      .map((day) => "${day.day}: ${day.startTime}-${day.endTime}")
-      .join(", ");
-
-  // Get the list of days the employee works
-  String daysString = widget.employees.workingDays
-      .where((day) => day.isActive)
-      .map((day) => day.day.substring(0, 3)) // Shorten to "Mon", "Tue", etc.
-      .join("-");
-
-  return SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        const SizedBox(height: 16),
-        // Basic Info Section
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.location_on, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Not available", // Location not available in API
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(Icons.access_time, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Text(
-                    workingDaysString.isNotEmpty
-                        ? "${widget.employees.workingDays.first.startTime}-${widget.employees.workingDays.first.endTime}, $daysString"
-                        : "Not available",
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(Icons.directions_walk, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Not available", // Distance not available in API
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.amber),
-                  const SizedBox(width: 8),
-                  Text(
-                    "Not available", // Rating not available in API
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-            ],
+        ClipRRect(
+          child: Image.network(
+            "https://appsdemo.pro/Framie/${widget.employees.employeeImage}",
+            height: 200,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Icons.error, size: 100),
           ),
         ),
         const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            widget.employees.about.isNotEmpty
-                ? widget.employees.about
-                : "No description available",
-            style: TextStyle(color: Colors.grey.shade600),
-          ),
-        ),
-        const SizedBox(height: 16),
-        // Services Section with Arrow
-        _buildInfoRow(
-          icon: Icons.star,
-          title: "Services",
-          content: widget.employees.availableServices.isNotEmpty
-              ? widget.employees.availableServices.map((service) => service.title).join(", ")
-              : "No services available",
-          showArrow: true,
-          iconColor: Colors.purple,
-        ),
-        // Rating Section with Arrow
-        _buildInfoRow(
-          icon: Icons.star,
-          title: "Rating",
-          content: "Not available", // Rating not available in API
-          showArrow: true,
-          iconColor: Colors.purple,
-        ),
-        // Experience Section
-        _buildInfoRow(
-          icon: Icons.school,
-          title: "Experience",
-          content: "Not available", // Experience not available in API
-          showArrow: false,
-          iconColor: Colors.purple,
-        ),
-        // Languages Section
-        _buildInfoRow(
-          icon: Icons.language,
-          title: "Languages",
-          content: "Not available", // Languages not available in API
-          showArrow: false,
-          iconColor: Colors.purple,
-        ),
-        // Certification Section
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              const Icon(Icons.verified, color: Colors.purple),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  "Not available", // Certification status not available in API
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.employees.employeeName,
                   style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purple,
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 20),
+                    const SizedBox(width: 4),
+                    const Text("Not available",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                Text(
+                  "Last Booked: Not available", // Last booked not available in API
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: _startChatWithStylist,
+              child: Icon(
+                Icons.chat,
+                color: Colors.purple,
+                size: 30,
               ),
-            ],
-          ),
-        ),
+            )
+          ],
+        )
       ],
-    ),
-  );
-}
+    );
+  }
 
+  Future<void> _startChatWithStylist() async {
+    try {
+      // Check if user is logged in
+      final userSession = UserSession();
+      String token = await userSession.getUserToken();
+      bool isLoggedIn = token.isNotEmpty;
+      if (!isLoggedIn) {
+        Get.toNamed(kLoginViewRoute);
+        return;
+      }
 
+      final ChatService _chatService = ChatService();
 
+      // Create or get existing chat - use adminId instead of employee.id
+      String chatId = await _chatService.createChat(widget.adminId);
 
+      // Navigate to chat screen
+      Get.to(() => ChatScreen(
+            chatId: chatId,
+            recipientName: widget.employees.employeeName,
+          ));
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Could not start chat. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      log('Error starting chat: $e');
+    }
+  }
+
+  Widget _buildAboutTab() {
+    // Format working days into a string
+    String workingDaysString = widget.employees.workingDays
+        .where((day) => day.isActive)
+        .map((day) => "${day.day}: ${day.startTime}-${day.endTime}")
+        .join(", ");
+
+    // Get the list of days the employee works
+    String daysString = widget.employees.workingDays
+        .where((day) => day.isActive)
+        .map((day) => day.day.substring(0, 3)) // Shorten to "Mon", "Tue", etc.
+        .join("-");
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16),
+          // Basic Info Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.location_on, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Not available", // Location not available in API
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.access_time, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Text(
+                      workingDaysString.isNotEmpty
+                          ? "${widget.employees.workingDays.first.startTime}-${widget.employees.workingDays.first.endTime}, $daysString"
+                          : "Not available",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.directions_walk, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Not available",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Not available",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              widget.employees.about.isNotEmpty
+                  ? widget.employees.about
+                  : "No description available",
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Services Section with Arrow
+          _buildInfoRow(
+            icon: Icons.star,
+            title: "Services",
+            content: widget.employees.availableServices.isNotEmpty
+                ? widget.employees.availableServices
+                    .map((service) => service.title)
+                    .join(", ")
+                : "No services available",
+            showArrow: true,
+            iconColor: Colors.purple,
+          ),
+          // Rating Section with Arrow
+          _buildInfoRow(
+            icon: Icons.star,
+            title: "Rating",
+            content: "Not available",
+            showArrow: true,
+            iconColor: Colors.purple,
+          ),
+          // Experience Section
+          _buildInfoRow(
+            icon: Icons.school,
+            title: "Experience",
+            content: "Not available",
+            showArrow: false,
+            iconColor: Colors.purple,
+          ),
+          // Languages Section
+          _buildInfoRow(
+            icon: Icons.language,
+            title: "Languages",
+            content: "Not available",
+            showArrow: false,
+            iconColor: Colors.purple,
+          ),
+          // Certification Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const Icon(Icons.verified, color: Colors.purple),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    "Not available", // Certification status not available in API
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildTabs() {
     return TabBar(
@@ -298,63 +357,18 @@ Widget _buildAboutTab() {
     );
   }
 
-
   Widget _buildServicesTab() {
-  return ListView(
-    padding: const EdgeInsets.all(16),
-    children: [
-      for (ServiceSalon service in widget.services.where((service) =>
-          widget.employees.availableServices.any((availableService) =>
-              availableService.id == service.id)))
-        _buildServiceCard(service),
-    ],
-  );
-}
-
-
-
-// Widget _buildBioTab() {
-//   return SingleChildScrollView(
-//     child: Padding(
-//       padding: const EdgeInsets.all(16),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           const Text(
-//             "Bio",
-//             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//           ),
-//           const SizedBox(height: 16),
-//           Text(
-//             widget.employees.about.isNotEmpty
-//                 ? widget.employees.about
-//                 : "No bio available",
-//             style: TextStyle(color: Colors.grey.shade600),
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
-
-
-
-
-// Widget _buildReviewsTab() {
-//   return ListView(
-//     padding: const EdgeInsets.all(16),
-//     children: [
-//       const Text(
-//         "Reviews",
-//         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-//       ),
-//       Text(
-//         "Not available", // Reviews not available in API
-//         style: TextStyle(color: Colors.grey.shade600),
-//       ),
-//     ],
-//   );
-// }
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        for (ServiceSalon service in widget.services.where((service) =>
+            widget.employees.availableServices.any((availableService) =>
+                availableService.id == service.id ||
+                availableService.title == service.title)))
+          _buildServiceCard(service),
+      ],
+    );
+  }
 
   Widget _buildReviewsTab() {
     return ListView(
@@ -457,11 +471,26 @@ Widget _buildAboutTab() {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  'https://appsdemo.pro/Framie/${service.bannerImage}',
+                child: CachedNetworkImage(
+                  imageUrl:
+                      'https://appsdemo.pro/Framie/${service.bannerImage}',
                   height: 200,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: Icon(Icons.image_not_supported, size: 50),
+                  ),
                 ),
               ),
               Positioned(
@@ -473,10 +502,11 @@ Widget _buildAboutTab() {
                     width: 180,
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.to(() => ConfirmBookingStylistScreen(
-                              serviceName: service.title.toString(),
-                              employees: widget.employees,
-                              services: service,
+                        // Navigate to subservices view first
+                        Get.to(() => SubServicesView(
+                              serviceId: service.id
+                                  .toString(), // Or service.serviceId based on your model
+                           
                             ));
                       },
                       style: ElevatedButton.styleFrom(
@@ -485,6 +515,20 @@ Widget _buildAboutTab() {
                       ),
                       child: const Text("Book Now"),
                     ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     Get.to(() => ConfirmBookingStylistScreen(
+                    //           serviceName: service.title.toString(),
+                    //           employees: widget.employees,
+                    //           services: service,
+                    //         ));
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.purple,
+                    //     foregroundColor: Colors.white,
+                    //   ),
+                    //   child: const Text("Book Now"),
+                    // ),
                   ),
                 ),
               )
@@ -502,6 +546,24 @@ Widget _buildAboutTab() {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const Spacer(),
+                // Text(
+                //   service.price.toString(),
+                //   style: const TextStyle(
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
+                // const SizedBox(width: 8),
+                // Text(
+                //   service.price != null
+                //       ? "\$${service.price!.toStringAsFixed(2)}"
+                //       : "N/A",
+                //   style: const TextStyle(
+                //     fontSize: 18,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
               ],
             ),
           ),

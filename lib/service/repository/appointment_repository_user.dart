@@ -53,57 +53,111 @@ class AppointmentRepositoryUser {
     }
   }
 
+  // Future<Map<String, dynamic>> bookAppointment({
+  //   required BasketDataModel busket,
+  // }) async {
+  //   final Uri url = Uri.parse('$kBaseUrl/api/admin/addAppointment');
+
+  //   try {
+  //     final response = await http.post(
+  //       url,
+  //       headers: {'Content-Type': 'application/json'},
+  //       body: json.encode({
+  //         "userId": busket.userId,
+  //         "adminId": busket.adminId,
+  //         "clientName": busket.clientName,
+  //         "date": busket.date,
+  //         "services": busket.services,
+  //         "stylist": busket.stylist,
+  //         "timeSlot": busket.timeSlot,
+  //         "price": busket.price,
+  //         "createdByModel": busket.createdByModel,
+  //         "createdBy": busket.createdBy
+  //       }),
+  //     );
+
+  //     final Map<String, dynamic> responseBody = json.decode(response.body);
+  //     log('Response Body: $responseBody');
+
+  //     if (responseBody['success'] == true) {
+  //       return {
+  //         'success': true,
+  //         'msg': responseBody['msg'],
+  //         'status': response.statusCode,
+  //         'data': responseBody['data'] ?? {},
+  //       };
+  //     } else {
+  //       return {
+  //         'success': false,
+  //         'msg': responseBody['msg'],
+  //         'status': response.statusCode,
+  //         'data': {},
+  //       };
+  //     }
+  //   } catch (e) {
+  //     log('Error: $e');
+  //     return {
+  //       'success': false,
+  //       'msg': 'An error occurred. Please try again later.',
+  //       'status': 500,
+  //       'data': {},
+  //     };
+  //   }
+  // }
+
+
   Future<Map<String, dynamic>> bookAppointment({
-    required BasketDataModel busket,
-  }) async {
-    final Uri url = Uri.parse('$kBaseUrl/api/admin/addAppointment');
+  required BasketDataModel busket,
+}) async {
+  final Uri url = Uri.parse('$kBaseUrl/api/admin/addAppointment');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          "userId": busket.userId,
-          "adminId": busket.adminId,
-          "clientName": busket.clientName,
-          "date": busket.date,
-          "services": busket.services,
-          "stylist": busket.stylist,
-          "timeSlot": busket.timeSlot,
-          "price": busket.price,
-          "createdByModel": busket.createdByModel,
-          "createdBy": busket.createdBy
-        }),
-      );
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        "userId": busket.userId,
+        "adminId": busket.adminId,
+        "clientName": busket.clientName,
+        "date": busket.date,
+        "services": busket.services,
+        "stylist": busket.stylist,
+        "timeSlot": busket.timeSlot,
+        "price": busket.price,
+        "createdByModel": busket.createdByModel,
+        "createdBy": busket.createdBy,
+      }),
+    );
 
-      final Map<String, dynamic> responseBody = json.decode(response.body);
-      log('Response Body: $responseBody');
+    final Map<String, dynamic> responseBody = json.decode(response.body);
+    log('Response Body: $responseBody');
 
-      if (responseBody['success'] == true) {
-        return {
-          'success': true,
-          'msg': responseBody['msg'],
-          'status': response.statusCode,
-          'data': responseBody['data'] ?? {},
-        };
-      } else {
-        return {
-          'success': false,
-          'msg': responseBody['msg'],
-          'status': response.statusCode,
-          'data': {},
-        };
-      }
-    } catch (e) {
-      log('Error: $e');
+    if (responseBody['success'] == true) {
+      return {
+        'success': true,
+        'msg': responseBody['msg'],
+        'status': response.statusCode,
+        'data': responseBody['data'] ?? {},
+      };
+    } else {
       return {
         'success': false,
-        'msg': 'An error occurred. Please try again later.',
-        'status': 500,
+        'msg': responseBody['msg'],
+        'status': response.statusCode,
+        'errorDetails': responseBody['error'] ?? {},
         'data': {},
       };
     }
+  } catch (e) {
+    log('Error: $e');
+    return {
+      'success': false,
+      'msg': 'An error occurred. Please try again later.',
+      'status': 500,
+      'data': {},
+    };
   }
+}
 
   Future<Map<String, dynamic>> updateEmployeeProfile({
     required CreateAllEmployees profile,

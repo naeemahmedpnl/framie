@@ -153,6 +153,9 @@ class AuthSignUpController extends GetxController {
     }
   }
 
+
+  
+
   @override
   void onClose() {
     firstNameController.dispose();

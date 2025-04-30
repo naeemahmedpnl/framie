@@ -1,3 +1,4 @@
+import 'package:beauty/service/repository/admin_auth_repository/dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -10,9 +11,17 @@ import '../../services/add_service/add_service.dart';
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
-    Get.put(AdminDashboardController());
+    // Initialize services before controller
+  if (!Get.isRegistered<ApiService>()) {
+    Get.put(ApiService());
+  }
+  
+  // Then initialize the controller
+  Get.put(AdminDashboardController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -37,6 +46,151 @@ class AdminDashboardScreen extends StatelessWidget {
       floatingActionButton: _buildCreateServiceButton(),
     );
   }
+
+  Widget _buildMainStats() {
+  final controller = Get.find<AdminDashboardController>();
+
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 24),
+    decoration: BoxDecoration(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.chevron_left, color: Color(0xFF4A0072)),
+              onPressed: () => controller.navigateMonth(false),
+            ),
+            Obx(() => Text(
+                  controller.currentMonth.value,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4A0072),
+                  ),
+                )),
+            IconButton(
+              icon: const Icon(Icons.chevron_right, color: Color(0xFF4A0072)),
+              onPressed: () => controller.navigateMonth(true),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Obx(() {
+          // Show loading indicator when loading
+          if (controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFF4A0072),
+              ),
+            );
+          }
+          
+          // Show error message if there's an error
+          if (controller.errorMessage.value.isNotEmpty) {
+            return Center(
+              child: Column(
+                children: [
+                  Icon(Icons.error_outline, color: Colors.red[700], size: 48),
+                  const SizedBox(height: 8),
+                  Text(
+                    controller.errorMessage.value,
+                    style: TextStyle(color: Colors.red[700]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () => controller.fetchData(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4A0072),
+                    ),
+                    child: const Text('Retry', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              ),
+            );
+          }
+          
+          // Show data when available
+          return CircularPercentIndicator(
+            radius: 120,
+            lineWidth: 15,
+            percent: controller.customerProgress,
+            center: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${controller.customerCount}',
+                  style: const TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4A0072),
+                  ),
+                ),
+                const Text(
+                  'Customer this month',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            progressColor: const Color(0xFF4A0072),
+            backgroundColor: Colors.white,
+            circularStrokeCap: CircularStrokeCap.round,
+          );
+        }),
+        const SizedBox(height: 20),
+        Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4A0072),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Icon(
+                  Icons.sentiment_satisfied_alt,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "You're doing good!",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF4A0072),
+                    ),
+                  ),
+                  Text(
+                    "You almost reached your goal",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildHeader() {
     final controller = Get.put(AdminDashboardController());
@@ -169,124 +323,53 @@ class AdminDashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMainStats() {
-    final controller = Get.put(AdminDashboardController());
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 24),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.chevron_left, color: Color(0xFF4A0072)),
-                onPressed: () => controller.navigateMonth(false),
+// This is an updated version of the _buildSecondaryStats method for the AdminDashboardScreen
+
+Widget _buildSecondaryStats() {
+  final controller = Get.find<AdminDashboardController>();
+
+  return Container(
+    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey[300]!),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Obx(() {
+      // If we're loading or there's an error, show appropriate UI
+      if (controller.isLoading.value) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: SizedBox(
+              height: 40,
+              width: 40,
+              child: CircularProgressIndicator(
+                color: Color(0xFF4A0072),
+                strokeWidth: 3,
               ),
-              Obx(() => Text(
-                    controller.currentMonth.value,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4A0072),
-                    ),
-                  )),
-              IconButton(
-                icon: const Icon(Icons.chevron_right, color: Color(0xFF4A0072)),
-                onPressed: () => controller.navigateMonth(true),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Obx(() => CircularPercentIndicator(
-                radius: 120,
-                lineWidth: 15,
-                percent: controller.customerProgress,
-                center: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '${controller.customerCount}',
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF4A0072),
-                      ),
-                    ),
-                    const Text(
-                      'Customer this month',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                progressColor: const Color(0xFF4A0072),
-                backgroundColor: Colors.white,
-                circularStrokeCap: CircularStrokeCap.round,
-              )),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF4A0072),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.sentiment_satisfied_alt,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "You're doing good!",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF4A0072),
-                      ),
-                    ),
-                    Text(
-                      "You almost reached your goal",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
+        );
+      }
 
-  Widget _buildSecondaryStats() {
-    final controller = Get.put(AdminDashboardController());
+      if (controller.errorMessage.value.isNotEmpty) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              "Data unavailable",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        );
+      }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
+      // Show data when available
+      return Row(
         children: [
           CircularPercentIndicator(
             radius: 35,
@@ -311,14 +394,14 @@ class AdminDashboardScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(() => Text(
-                    '${controller.visitorCount}',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4A0072),
-                    ),
-                  )),
+              Text(
+                '${controller.visitorCount.value}',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF4A0072),
+                ),
+              ),
               const Text(
                 'Visitors this month',
                 style: TextStyle(
@@ -329,9 +412,10 @@ class AdminDashboardScreen extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
+      );
+    }),
+  );
+}
 
   Widget _buildCreateServiceButton() {
     return CustomButton(

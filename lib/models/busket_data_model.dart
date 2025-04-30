@@ -40,25 +40,26 @@ class BasketDataModel {
   final String adminId;
   final String clientName;
   final String date;
-  final String stylist;
+  final List<String> services;
+  final String? stylist; // Changed to nullable String?
   final String timeSlot;
   final String price;
   final String createdByModel;
   final String createdBy;
-  final List<String> services;
 
   BasketDataModel({
     required this.userId,
     required this.adminId,
     required this.clientName,
     required this.date,
-    required this.stylist,
+    required this.services,
+    this.stylist, // Nullable, no longer required
     required this.timeSlot,
     required this.price,
     required this.createdByModel,
     required this.createdBy,
-    required this.services,
   });
+
 
   Map<String, dynamic> toJson() {
     return {

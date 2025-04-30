@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,8 +15,11 @@ class AdminLoginScreen extends StatefulWidget {
 }
 
 class _AdminLoginScreenState extends State<AdminLoginScreen> {
+
   final AdminLoginController controller = Get.put(AdminLoginController());
 
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,29 +67,27 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            _buildSocialButton(
-              icon: "assets/images/google_icon.png",
-              text: "Sign in with Google",
-              backgroundColor: Colors.white,
-              borderColor: Colors.black12,
-              textColor: Colors.black,
-            ),
-            const SizedBox(height: 12),
-            _buildSocialButton(
-              icon: "assets/images/apple_icon.png",
-              text: "Sign in with Apple",
-              backgroundColor: Colors.black,
-              borderColor: Colors.black,
-              textColor: Colors.white,
-            ),
-            const SizedBox(height: 12),
-            _buildSocialButton(
-              icon: "assets/images/facebook_icon.png",
-              text: "Sign in with Facebook",
-              backgroundColor: Colors.white,
-              borderColor: Colors.black12,
-              textColor: Colors.black,
-            ),
+            // _buildSocialButton(
+            //   isLoading: _isLoading,
+            //    onPressed: _handleGoogleSignIn,
+            //   icon: "assets/images/google_icon.png",
+            //   text: "Sign in with Google",
+            //   backgroundColor: Colors.white,
+            //   borderColor: Colors.black12,
+            //   textColor: Colors.black,
+            // ),
+            // const SizedBox(height: 12),
+            // _buildSocialButton(
+            //   isLoading: false,
+            //    onPressed: (){},
+            //   icon: "assets/images/apple_icon.png",
+            //   text: "Sign in with Apple",
+            //   backgroundColor: Colors.black,
+            //   borderColor: Colors.black,
+            //   textColor: Colors.white,
+            // ),
+            // const SizedBox(height: 12),
+
             const SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -116,32 +118,49 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     );
   }
 
-  Widget _buildSocialButton({
-    required String icon,
-    required String text,
-    required Color backgroundColor,
-    required Color borderColor,
-    required Color textColor,
-  }) {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(color: borderColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(icon, width: 24, height: 24),
-          const SizedBox(width: 10),
-          Text(
-            text,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    );
-  }
+//   Widget _buildSocialButton({
+//   required bool isLoading,
+//   required VoidCallback onPressed,
+//   required String icon,
+//   required String text,
+//   required Color backgroundColor,
+//   required Color borderColor,
+//   required Color textColor,
+// }) {
+//   return GestureDetector( 
+//     onTap: isLoading ? null : onPressed,
+//     child: Container(
+//       width: double.infinity,
+//       height: 50,
+//       decoration: BoxDecoration(
+//         color: backgroundColor,
+//         border: Border.all(color: borderColor),
+//         borderRadius: BorderRadius.circular(8),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           if (isLoading)
+//             SizedBox(
+//               width: 24,
+//               height: 24,
+//               child: CircularProgressIndicator(
+//                 strokeWidth: 2,
+//                 valueColor: AlwaysStoppedAnimation<Color>(textColor),
+//               ),
+//             )
+//           else
+//             Image.asset(icon, width: 24, height: 24),
+//           const SizedBox(width: 10),
+//           Text(
+//             isLoading ? "Loading..." : text,
+//             style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
+//           ),
+//         ],
+//       ),
+//     ),
+//   );
+// }
+
+ 
 }
